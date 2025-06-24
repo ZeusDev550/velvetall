@@ -4,12 +4,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using VelvetLeash.API.Model;
+using Microsoft.Data.Sqlite;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add EF Core with SQL Server
-string cs = "Server=SHAIKH;Database=velvetleash;User Id=sa;Password=sarim5ahmed;TrustServerCertificate=True;";
-builder.Services.AddDbContext<ApplicationDbContext>(a => a.UseSqlServer(cs));
+// For development, we'll use SQLite instead of SQL Server
+string cs = "Data Source=velvetleash.db";
+builder.Services.AddDbContext<ApplicationDbContext>(a => a.UseSqlite(cs));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -58,10 +60,15 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-// ✅ Seed sitters if DB is empty
+// Create and seed the database
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    
+    // Create the database if it doesn't exist
+    db.Database.EnsureCreated();
+    
+    // Seed sitters if DB is empty
     if (!db.Sitters.Any())
     {
         db.Sitters.AddRange(

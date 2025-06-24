@@ -9,9 +9,9 @@ namespace VelvetLeash.API.Data
         {
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
 
-            // ✅ Updated connection string without instance name
-            string cs = "Server=SHAIKH;Database=velvetleash;User Id=sa;Password=sarim5ahmed;TrustServerCertificate=True;";
-            optionsBuilder.UseSqlServer(cs);
+            // Using SQLite for development
+            string cs = "Data Source=velvetleash.db";
+            optionsBuilder.UseSqlite(cs);
 
             return new ApplicationDbContext(optionsBuilder.Options);
         }
