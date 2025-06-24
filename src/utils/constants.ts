@@ -1,1 +1,1 @@
-export const API_URL = 'https://work-1-tnuspjhyouargdwm.prod-runtime.all-hands.dev:12000/api'
+export const API_URL = 'https://work-1-tnuspjhyouargdwm.prod-runtime.all-hands.dev/api'
